@@ -53,7 +53,12 @@
   - NumPy 백엔드 기능에 대한 단위 테스트 작성
   - _Requirements: 3.1_
 
-- [ ] 3.3 PyTorch 백엔드 구현
+- [x] 3.3 PyTorch 백엔드 구현
+
+
+
+
+
   - PyTorch 텐서를 사용하는 PyTorchBackend 클래스 작성
   - 자동 미분 지원 및 GPU 연산 옵션 구현
   - PyTorch 백엔드 기능에 대한 단위 테스트 작성

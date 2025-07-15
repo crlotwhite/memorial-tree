@@ -10,5 +10,6 @@ This module provides abstraction for different numerical computation libraries:
 
 from .backend_manager import BackendManager, BackendInterface
 from .numpy_backend import NumpyBackend
+from .pytorch_backend import PyTorchBackend
 
-__all__ = ["BackendManager", "BackendInterface", "NumpyBackend"]
+__all__ = ["BackendManager", "BackendInterface", "NumpyBackend", "PyTorchBackend"]
