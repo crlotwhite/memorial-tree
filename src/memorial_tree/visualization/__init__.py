@@ -2,6 +2,11 @@
 Visualization module for Memorial Tree.
 
 This module provides tools for analyzing and visualizing thought trees:
-- TreeVisualizer: Tools for rendering tree structures
-- PathAnalyzer: Analysis of decision paths and influences
+- ModelVisualizer: Tools for visualizing model comparisons
+- StatisticalAnalyzer: Tools for statistical analysis of model comparisons
 """
+
+from .model_visualizer import ModelVisualizer
+from .statistical_analyzer import StatisticalAnalyzer
+
+__all__ = ["ModelVisualizer", "StatisticalAnalyzer"]
