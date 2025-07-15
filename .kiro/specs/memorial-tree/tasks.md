@@ -7,22 +7,13 @@
   - _Requirements: 5.1, 5.2_
 
 - [x] 2. 핵심 노드 클래스 구현
-
-
-
-
 - [x] 2.1 기본 ThoughtNode 클래스 구현
-
-
-
   - 노드 ID, 콘텐츠, 가중치, 부모-자식 관계를 관리하는 ThoughtNode 클래스 작성
   - 노드 생성, 자식 추가, 경로 탐색 메서드 구현
   - ThoughtNode 클래스에 대한 단위 테스트 작성
   - _Requirements: 1.1, 1.2, 1.3_
 
 - [x] 2.2 GhostNode 클래스 구현
-
-
   - ThoughtNode를 상속받는 GhostNode 클래스 작성
   - 영향력, 가시성, 활성화 조건을 관리하는 속성과 메서드 구현
   - 고스트 노드의 영향력 계산 및 적용 로직 구현
@@ -30,14 +21,7 @@
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
 - [x] 3. 백엔드 추상화 레이어 구현
-
-
-
-
 - [x] 3.1 BackendManager 기본 구조 구현
-
-
-
   - 백엔드 타입을 관리하는 BackendManager 클래스 작성
   - 백엔드별 초기화 및 전환 로직 구현
   - 공통 텐서 연산 인터페이스 정의
@@ -45,46 +29,33 @@
   - _Requirements: 3.1, 3.4_
 
 - [x] 3.2 NumPy 백엔드 구현
-
-
-
-
-
   - NumPy 배열을 사용하는 NumpyBackend 클래스 작성
   - 텐서 생성, 가중치 계산, softmax 연산 구현
   - NumPy 백엔드 기능에 대한 단위 테스트 작성
   - _Requirements: 3.1_
 
 - [x] 3.3 PyTorch 백엔드 구현
-
-
-
-
-
   - PyTorch 텐서를 사용하는 PyTorchBackend 클래스 작성
   - 자동 미분 지원 및 GPU 연산 옵션 구현
   - PyTorch 백엔드 기능에 대한 단위 테스트 작성
   - _Requirements: 3.2_
 
 - [x] 3.4 TensorFlow 백엔드 구현
-
-
-
-
   - TensorFlow 텐서를 사용하는 TensorFlowBackend 클래스 작성
   - Keras 호환성 및 그래프 모드 지원 구현
   - TensorFlow 백엔드 기능에 대한 단위 테스트 작성
   - _Requirements: 3.3_
 
-- [ ] 4. 메인 MemorialTree 클래스 구현
-- [ ] 4.1 기본 트리 구조 관리 기능 구현
+- [-] 4. 메인 MemorialTree 클래스 구현
+- [x] 4.1 기본 트리 구조 관리 기능 구현
   - 루트 노드 생성 및 트리 초기화 로직 작성
   - 노드 추가, 삭제, 검색 기능 구현
   - 현재 상태 추적 및 경로 관리 기능 구현
   - 기본 트리 기능에 대한 단위 테스트 작성
   - _Requirements: 1.1, 1.2, 1.4_
 
-- [ ] 4.2 의사결정 프로세스 구현
+- [x] 4.2 의사결정 프로세스 구현
+
   - 선택지 평가 및 확률 계산 로직 작성
   - 고스트 노드 영향력 적용 메커니즘 구현
   - 선택 실행 및 상태 업데이트 기능 구현

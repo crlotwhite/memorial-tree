@@ -9,5 +9,6 @@ This module contains the fundamental data structures and algorithms:
 
 from .thought_node import ThoughtNode
 from .ghost_node import GhostNode
+from .memorial_tree import MemorialTree
 
-__all__ = ["ThoughtNode", "GhostNode"]
+__all__ = ["ThoughtNode", "GhostNode", "MemorialTree"]
