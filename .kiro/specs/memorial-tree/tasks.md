@@ -29,7 +29,9 @@
   - GhostNode 클래스에 대한 단위 테스트 작성
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [-] 3. 백엔드 추상화 레이어 구현
+- [x] 3. 백엔드 추상화 레이어 구현
+
+
 
 
 - [x] 3.1 BackendManager 기본 구조 구현
@@ -64,7 +66,11 @@
   - PyTorch 백엔드 기능에 대한 단위 테스트 작성
   - _Requirements: 3.2_
 
-- [ ] 3.4 TensorFlow 백엔드 구현
+- [x] 3.4 TensorFlow 백엔드 구현
+
+
+
+
   - TensorFlow 텐서를 사용하는 TensorFlowBackend 클래스 작성
   - Keras 호환성 및 그래프 모드 지원 구현
   - TensorFlow 백엔드 기능에 대한 단위 테스트 작성

@@ -2,7 +2,7 @@
 TensorFlow Backend module for Memorial Tree.
 
 This module provides the TensorFlowBackend class, which implements the BackendInterface
-using TensorFlow tensors for operations.
+using TensorFlow tensors for operations with Keras compatibility.
 """
 
 from typing import Dict, List, Any, Optional, Union
@@ -15,14 +15,17 @@ class TensorFlowBackend(BackendInterface):
     """
     TensorFlow implementation of the BackendInterface.
 
-    This class provides tensor operations using TensorFlow tensors.
-    Note: This is a placeholder implementation. The actual implementation
-    will be completed in task 3.4.
+    This class provides tensor operations using TensorFlow tensors with support for
+    Keras compatibility and graph mode execution.
     """
 
-    def __init__(self):
+    def __init__(self, use_gpu: bool = False, eager_mode: bool = True):
         """
         Initialize a new TensorFlowBackend.
+
+        Args:
+            use_gpu (bool): Whether to use GPU acceleration if available.
+            eager_mode (bool): Whether to use eager execution (True) or graph mode (False).
 
         Raises:
             ImportError: If TensorFlow is not installed.
@@ -31,6 +34,16 @@ class TensorFlowBackend(BackendInterface):
             import tensorflow as tf
 
             self.tf = tf
+
+            # Configure GPU usage
+            if not use_gpu:
+                # Limit TensorFlow to CPU only
+                self.tf.config.set_visible_devices([], "GPU")
+
+            # Configure execution mode
+            self.tf.config.run_functions_eagerly(eager_mode)
+            self.eager_mode = eager_mode
+
         except ImportError:
             raise ImportError(
                 "TensorFlow is not installed. Please install it with 'pip install tensorflow'."
@@ -58,6 +71,11 @@ class TensorFlowBackend(BackendInterface):
         Returns:
             np.ndarray: The tensor as a NumPy array.
         """
+        # Check if tensor is already a NumPy array
+        if isinstance(tensor, np.ndarray):
+            return tensor
+
+        # Convert TensorFlow tensor to NumPy
         return tensor.numpy()
 
     def from_numpy(self, array: np.ndarray) -> Any:
@@ -70,7 +88,7 @@ class TensorFlowBackend(BackendInterface):
         Returns:
             tf.Tensor: The array as a TensorFlow tensor.
         """
-        return self.tf.convert_to_tensor(array)
+        return self.tf.convert_to_tensor(array, dtype=self.tf.float32)
 
     def calculate_weights(
         self, tensors: List[Any], factors: Optional[List[float]] = None
@@ -85,8 +103,31 @@ class TensorFlowBackend(BackendInterface):
         Returns:
             tf.Tensor: The weighted result as a TensorFlow tensor.
         """
-        # Placeholder implementation - will be completed in task 3.4
-        raise NotImplementedError("TensorFlow backend is not fully implemented yet")
+        if not tensors:
+            return self.tf.constant([], dtype=self.tf.float32)
+
+        if factors is None:
+            factors = [1.0] * len(tensors)
+
+        if len(tensors) != len(factors):
+            raise ValueError("Number of tensors must match number of factors")
+
+        # Convert factors to a tensor
+        factors_tensor = self.tf.constant(factors, dtype=self.tf.float32)
+
+        # Ensure all tensors are TensorFlow tensors
+        tf_tensors = []
+        for tensor in tensors:
+            if not isinstance(tensor, self.tf.Tensor):
+                tensor = self.from_numpy(self.to_numpy(tensor))
+            tf_tensors.append(tensor)
+
+        # Apply weights and sum
+        weighted_sum = self.tf.zeros_like(tf_tensors[0])
+        for tensor, factor in zip(tf_tensors, factors_tensor):
+            weighted_sum += tensor * factor
+
+        return weighted_sum
 
     def apply_softmax(self, tensor: Any, temperature: float = 1.0) -> Any:
         """
@@ -99,8 +140,18 @@ class TensorFlowBackend(BackendInterface):
         Returns:
             tf.Tensor: The result of applying softmax.
         """
-        # Placeholder implementation - will be completed in task 3.4
-        raise NotImplementedError("TensorFlow backend is not fully implemented yet")
+        # Ensure tensor is a TensorFlow tensor
+        if not isinstance(tensor, self.tf.Tensor):
+            tensor = self.from_numpy(self.to_numpy(tensor))
+
+        # Apply temperature scaling
+        scaled = tensor / self.tf.maximum(
+            self.tf.constant(temperature, dtype=self.tf.float32),
+            self.tf.constant(1e-8, dtype=self.tf.float32),
+        )
+
+        # Use TensorFlow's built-in softmax function
+        return self.tf.nn.softmax(scaled)
 
     def get_backend_name(self) -> str:
         """
@@ -110,3 +161,81 @@ class TensorFlowBackend(BackendInterface):
             str: The backend name.
         """
         return "tensorflow"
+
+    def set_eager_mode(self, enable: bool = True) -> None:
+        """
+        Enable or disable eager execution mode.
+
+        Args:
+            enable (bool): Whether to enable eager execution.
+        """
+        self.tf.config.run_functions_eagerly(enable)
+        self.eager_mode = enable
+
+    def is_eager_mode(self) -> bool:
+        """
+        Check if eager execution mode is enabled.
+
+        Returns:
+            bool: True if eager execution is enabled, False otherwise.
+        """
+        return self.eager_mode
+
+    def use_gpu(self, enable: bool = True) -> bool:
+        """
+        Enable or disable GPU usage if available.
+
+        Args:
+            enable (bool): Whether to enable GPU usage.
+
+        Returns:
+            bool: True if GPU is now being used, False otherwise.
+        """
+        gpus = self.tf.config.list_physical_devices("GPU")
+
+        if enable and gpus:
+            # Enable GPU
+            for gpu in gpus:
+                self.tf.config.experimental.set_memory_growth(gpu, True)
+            return True
+        else:
+            # Disable GPU
+            self.tf.config.set_visible_devices([], "GPU")
+            return False
+
+    def get_keras_layer(self, layer_type: str, **kwargs) -> Any:
+        """
+        Create a Keras layer for use with the TensorFlow backend.
+
+        Args:
+            layer_type (str): Type of layer to create (e.g., 'Dense', 'Conv2D').
+            **kwargs: Additional arguments to pass to the layer constructor.
+
+        Returns:
+            tf.keras.layers.Layer: A Keras layer instance.
+
+        Raises:
+            ValueError: If the layer type is not supported.
+        """
+        try:
+            layer_class = getattr(self.tf.keras.layers, layer_type)
+            return layer_class(**kwargs)
+        except AttributeError:
+            raise ValueError(f"Unsupported layer type: {layer_type}")
+
+    @staticmethod
+    def tf_function(func):
+        """
+        Decorator to convert a Python function into a TensorFlow Function.
+
+        This enables graph execution for better performance when not in eager mode.
+
+        Args:
+            func: The function to convert.
+
+        Returns:
+            A callable TensorFlow Function.
+        """
+        import tensorflow as tf
+
+        return tf.function(func)
