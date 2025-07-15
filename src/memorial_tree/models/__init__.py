@@ -6,3 +6,7 @@ This module contains specialized models for different mental health conditions:
 - DepressionModel: Model for depressive thought patterns
 - AnxietyModel: Model for anxiety-related decision processes
 """
+
+from .adhd_model import ADHDModel
+
+__all__ = ["ADHDModel"]

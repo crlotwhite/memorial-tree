@@ -12,9 +12,15 @@ __email__ = "info@memorialtree.org"
 # Import main classes for easier access
 from .core.thought_node import ThoughtNode
 from .core.ghost_node import GhostNode
+from .core.memorial_tree import MemorialTree
 from .backends.backend_manager import BackendManager, BackendInterface
+from .models.adhd_model import ADHDModel
 
-# These will be implemented in future tasks
-# from .core.memorial_tree import MemorialTree
-
-__all__ = ["ThoughtNode", "GhostNode", "BackendManager", "BackendInterface"]
+__all__ = [
+    "ThoughtNode",
+    "GhostNode",
+    "MemorialTree",
+    "BackendManager",
+    "BackendInterface",
+    "ADHDModel",
+]
