@@ -8,5 +8,6 @@ This module contains specialized models for different mental health conditions:
 """
 
 from .adhd_model import ADHDModel
+from .depression_model import DepressionModel
 
-__all__ = ["ADHDModel"]
+__all__ = ["ADHDModel", "DepressionModel"]
