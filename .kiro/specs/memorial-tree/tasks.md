@@ -29,15 +29,25 @@
   - GhostNode 클래스에 대한 단위 테스트 작성
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 3. 백엔드 추상화 레이어 구현
-- [ ] 3.1 BackendManager 기본 구조 구현
+- [-] 3. 백엔드 추상화 레이어 구현
+
+
+- [x] 3.1 BackendManager 기본 구조 구현
+
+
+
   - 백엔드 타입을 관리하는 BackendManager 클래스 작성
   - 백엔드별 초기화 및 전환 로직 구현
   - 공통 텐서 연산 인터페이스 정의
   - BackendManager에 대한 단위 테스트 작성
   - _Requirements: 3.1, 3.4_
 
-- [ ] 3.2 NumPy 백엔드 구현
+- [x] 3.2 NumPy 백엔드 구현
+
+
+
+
+
   - NumPy 배열을 사용하는 NumpyBackend 클래스 작성
   - 텐서 생성, 가중치 계산, softmax 연산 구현
   - NumPy 백엔드 기능에 대한 단위 테스트 작성
