@@ -351,20 +351,29 @@ class MemorialTree:
         """
         Get the maximum depth of the tree.
 
+        This implementation uses an iterative approach for better performance
+        with large trees, avoiding recursion stack limitations.
+
         Returns:
             int: Maximum depth.
         """
+        if not self.root:
+            return 0
 
-        def calculate_depth(node: ThoughtNode, current_depth: int) -> int:
-            if not node.children:
-                return current_depth
+        # Use an iterative approach with a queue for better performance
+        # Each queue item is a tuple of (node, depth)
+        queue = [(self.root, 0)]
+        max_depth = 0
 
-            child_depths = [
-                calculate_depth(child, current_depth + 1) for child in node.children
-            ]
-            return max(child_depths)
+        while queue:
+            node, depth = queue.pop(0)
+            max_depth = max(max_depth, depth)
 
-        return calculate_depth(self.root, 0)
+            # Add all children to the queue with incremented depth
+            for child in node.children:
+                queue.append((child, depth + 1))
+
+        return max_depth
 
     def __repr__(self) -> str:
         """

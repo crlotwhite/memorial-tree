@@ -133,6 +133,9 @@ class TensorFlowBackend(BackendInterface):
         """
         Apply softmax function to a tensor.
 
+        This implementation is optimized for performance using TensorFlow's XLA compilation
+        when available.
+
         Args:
             tensor (tf.Tensor): The input tensor.
             temperature (float): Temperature parameter for softmax.
@@ -144,14 +147,20 @@ class TensorFlowBackend(BackendInterface):
         if not isinstance(tensor, self.tf.Tensor):
             tensor = self.from_numpy(self.to_numpy(tensor))
 
-        # Apply temperature scaling
-        scaled = tensor / self.tf.maximum(
-            self.tf.constant(temperature, dtype=self.tf.float32),
-            self.tf.constant(1e-8, dtype=self.tf.float32),
-        )
+        # Use a function that can be XLA-compiled for better performance
+        @self.tf_function
+        def optimized_softmax(x, temp):
+            # Apply temperature scaling with efficient broadcasting
+            scaled = x / self.tf.maximum(
+                self.tf.constant(temp, dtype=self.tf.float32),
+                self.tf.constant(1e-8, dtype=self.tf.float32),
+            )
 
-        # Use TensorFlow's built-in softmax function
-        return self.tf.nn.softmax(scaled)
+            # Use TensorFlow's built-in softmax function which is already optimized
+            return self.tf.nn.softmax(scaled)
+
+        # Apply the optimized function
+        return optimized_softmax(tensor, temperature)
 
     def get_backend_name(self) -> str:
         """

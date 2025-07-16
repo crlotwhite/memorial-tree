@@ -90,6 +90,8 @@ class NumpyBackend(BackendInterface):
         """
         Apply softmax function to a tensor.
 
+        This implementation is optimized for numerical stability and performance.
+
         Args:
             tensor (np.ndarray): The input tensor.
             temperature (float): Temperature parameter for softmax.
@@ -97,14 +99,18 @@ class NumpyBackend(BackendInterface):
         Returns:
             np.ndarray: The result of applying softmax.
         """
-        # Apply temperature scaling
-        scaled = tensor / max(temperature, 1e-8)  # Avoid division by zero
+        # Apply temperature scaling with vectorized operations
+        # Use fmax for element-wise maximum to avoid division by zero
+        scaled = tensor / np.fmax(temperature, 1e-8)
 
-        # Subtract max for numerical stability
-        exp_values = np.exp(scaled - np.max(scaled))
+        # Subtract max for numerical stability (prevents overflow)
+        # Use keepdims to ensure proper broadcasting
+        max_val = np.max(scaled, keepdims=True)
+        exp_values = np.exp(scaled - max_val)
 
-        # Normalize
-        return exp_values / np.sum(exp_values)
+        # Normalize with sum keepdims for proper broadcasting
+        sum_val = np.sum(exp_values, keepdims=True)
+        return exp_values / sum_val
 
     def get_backend_name(self) -> str:
         """

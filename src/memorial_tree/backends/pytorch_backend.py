@@ -89,6 +89,8 @@ class PyTorchBackend(BackendInterface):
         """
         Calculate weighted values from a list of tensors.
 
+        This implementation is optimized for performance using vectorized operations.
+
         Args:
             tensors (List[torch.Tensor]): List of tensors to weight.
             factors (Optional[List[float]]): Optional weighting factors.
@@ -110,19 +112,45 @@ class PyTorchBackend(BackendInterface):
             factors, dtype=self.torch.float32, device=self.device
         )
 
-        # Ensure all tensors are PyTorch tensors on the correct device
-        torch_tensors = []
-        for tensor in tensors:
-            if not isinstance(tensor, self.torch.Tensor):
-                tensor = self.from_numpy(self.to_numpy(tensor))
-            elif tensor.device != self.device:
-                tensor = tensor.to(self.device)
-            torch_tensors.append(tensor)
+        # Process tensors in batches for better performance
+        batch_size = 32  # Process 32 tensors at a time
+        num_tensors = len(tensors)
+        weighted_sum = None
 
-        # Apply weights and sum
-        weighted_sum = self.torch.zeros_like(torch_tensors[0])
-        for tensor, factor in zip(torch_tensors, factors_tensor):
-            weighted_sum += tensor * factor
+        for i in range(0, num_tensors, batch_size):
+            batch_tensors = tensors[i : i + batch_size]
+            batch_factors = factors_tensor[i : i + batch_size]
+
+            # Ensure all tensors in batch are PyTorch tensors on the correct device
+            batch_torch_tensors = []
+            for tensor in batch_tensors:
+                if not isinstance(tensor, self.torch.Tensor):
+                    tensor = self.from_numpy(self.to_numpy(tensor))
+                elif tensor.device != self.device:
+                    tensor = tensor.to(self.device)
+                batch_torch_tensors.append(tensor)
+
+            # Stack tensors for vectorized operations if they have the same shape
+            try:
+                # Try to stack tensors for vectorized operations
+                stacked_tensors = self.torch.stack(batch_torch_tensors, dim=0)
+                batch_result = self.torch.sum(
+                    stacked_tensors
+                    * batch_factors.view(-1, *([1] * (stacked_tensors.dim() - 1))),
+                    dim=0,
+                )
+
+                if weighted_sum is None:
+                    weighted_sum = batch_result
+                else:
+                    weighted_sum += batch_result
+            except:
+                # Fall back to loop if tensors can't be stacked (different shapes)
+                for tensor, factor in zip(batch_torch_tensors, batch_factors):
+                    if weighted_sum is None:
+                        weighted_sum = tensor * factor
+                    else:
+                        weighted_sum += tensor * factor
 
         return weighted_sum
 

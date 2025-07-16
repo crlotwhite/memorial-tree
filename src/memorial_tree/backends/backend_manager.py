@@ -102,6 +102,7 @@ class BackendManager:
     Attributes:
         backend_type (str): The type of backend currently in use.
         backend (BackendInterface): The current backend implementation.
+        _backend_cache (Dict[str, BackendInterface]): Cache of initialized backends.
     """
 
     def __init__(self, backend_type: str = "numpy"):
@@ -116,6 +117,8 @@ class BackendManager:
             ValueError: If an unsupported backend type is specified.
         """
         self.backend_type = backend_type.lower()
+        # Initialize backend cache for faster switching
+        self._backend_cache = {}
         self.backend = self._initialize_backend()
 
     def _initialize_backend(self) -> BackendInterface:
@@ -128,23 +131,32 @@ class BackendManager:
         Raises:
             ValueError: If an unsupported backend type is specified.
         """
+        # Check if backend is already in cache
+        if self.backend_type in self._backend_cache:
+            return self._backend_cache[self.backend_type]
+
+        # Initialize new backend
         if self.backend_type == "numpy":
             # Import here to avoid circular imports
             from .numpy_backend import NumpyBackend
 
-            return NumpyBackend()
+            backend = NumpyBackend()
         elif self.backend_type == "pytorch":
             # Import here to avoid circular imports
             from .pytorch_backend import PyTorchBackend
 
-            return PyTorchBackend()
+            backend = PyTorchBackend()
         elif self.backend_type == "tensorflow":
             # Import here to avoid circular imports
             from .tensorflow_backend import TensorFlowBackend
 
-            return TensorFlowBackend()
+            backend = TensorFlowBackend()
         else:
             raise ValueError(f"Unsupported backend type: {self.backend_type}")
+
+        # Cache the backend for future use
+        self._backend_cache[self.backend_type] = backend
+        return backend
 
     def switch_backend(self, new_backend_type: str) -> None:
         """
@@ -157,10 +169,11 @@ class BackendManager:
         Raises:
             ValueError: If an unsupported backend type is specified.
         """
-        if new_backend_type.lower() == self.backend_type:
+        new_backend_type = new_backend_type.lower()
+        if new_backend_type == self.backend_type:
             return  # Already using this backend
 
-        self.backend_type = new_backend_type.lower()
+        self.backend_type = new_backend_type
         self.backend = self._initialize_backend()
 
     def create_tensor(self, data: List[float]) -> Any:
