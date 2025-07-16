@@ -1,5 +1,11 @@
 # Memorial Tree
 
+[![PyPI version](https://badge.fury.io/py/memorial-tree.svg)](https://badge.fury.io/py/memorial-tree)
+[![Tests](https://github.com/memorialtree/memorial-tree/actions/workflows/test.yml/badge.svg)](https://github.com/memorialtree/memorial-tree/actions/workflows/test.yml)
+[![Lint](https://github.com/memorialtree/memorial-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/memorialtree/memorial-tree/actions/workflows/lint.yml)
+[![Documentation Status](https://readthedocs.io/en/latest/?badge=latest)](https://memorial-tree.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Memorial Tree is a Python package for modeling human thought processes and decision-making using tree data structures. The package aims to provide tools for computational psychiatry research by representing both conscious choices and unconscious influences (ghost nodes) in human cognitive processes.
 
 ## Features
@@ -50,10 +56,108 @@ print(f"Decision: {decision.content}")
 tree.visualize()
 ```
 
+## Advanced Features
+
+### Mental Health Models
+
+Memorial Tree includes models for different mental health conditions:
+
+```python
+from memorial_tree.models import ADHDModel, DepressionModel, AnxietyModel
+
+# Create a tree with ADHD model
+adhd_tree = MemorialTree(model=ADHDModel())
+
+# Create a tree with Depression model
+depression_tree = MemorialTree(model=DepressionModel())
+
+# Create a tree with Anxiety model
+anxiety_tree = MemorialTree(model=AnxietyModel())
+```
+
+### Multiple Backends
+
+Memorial Tree supports multiple numerical computation backends:
+
+```python
+# Using NumPy backend (default)
+tree = MemorialTree(backend='numpy')
+
+# Using PyTorch backend
+tree = MemorialTree(backend='pytorch')
+
+# Using TensorFlow backend
+tree = MemorialTree(backend='tensorflow')
+```
+
+## Examples
+
+Check out the [examples](examples/) directory for more detailed examples:
+
+- [Basic Usage](examples/basic_usage.py)
+- [Advanced Features](examples/advanced_features_example.py)
+- [ADHD Model](examples/adhd_model_example.py)
+- [Depression Model](examples/depression_model_example.py)
+- [Anxiety Model](examples/anxiety_model_example.py)
+- [Model Comparison](examples/model_comparison_example.py)
+- [Tree Visualization](examples/tree_visualization_example.py)
+- [Path Analysis](examples/path_analysis_example.py)
+
 ## Documentation
 
 For full documentation, visit [memorialtree.readthedocs.io](https://memorialtree.readthedocs.io).
 
+To build the documentation locally:
+
+```bash
+cd docs
+make html
+# View docs in browser at docs/build/html/index.html
+```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Development
+
+### CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Tests**: Automatically runs tests on multiple Python versions for every push and pull request
+- **Linting**: Checks code quality using flake8, black, and mypy
+- **Publishing**: Automatically publishes new releases to PyPI when a new release is created
+
+To run the checks locally:
+
+```bash
+# Run tests
+pytest --cov=memorial_tree tests/
+
+# Check code formatting
+black --check src tests examples
+
+# Run linting
+flake8 src tests examples
+
+# Run type checking
+mypy src tests examples
+```
+
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citation
+
+If you use Memorial Tree in your research, please cite:
+
+```bibtex
+@software{memorial_tree,
+  author = {Memorial Tree Team},
+  title = {Memorial Tree: A Python Package for Modeling Human Thought Processes},
+  year = {2025},
+  url = {https://github.com/yourusername/memorial-tree},
+}
+```

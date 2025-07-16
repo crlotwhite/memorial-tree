@@ -2,10 +2,107 @@
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "memorial-tree"
+version = "0.1.0"
+description = "A Python package for modeling human thought processes and decision-making using tree data structures"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Memorial Tree Team", email = "info@memorialtree.org"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = [
+    "cognitive-modeling",
+    "decision-making",
+    "computational-psychiatry",
+    "tree-structure",
+    "mental-health",
+    "thought-process",
+    "ghost-nodes",
+    "adhd",
+    "depression",
+    "anxiety"
+]
+
+dependencies = [
+    "numpy>=1.20.0,<2.0.0",
+    "matplotlib>=3.4.0,<4.0.0",
+    "networkx>=2.6.0,<3.0.0",
+    "typing-extensions>=4.0.0,<5.0.0",
+]
+
+[project.optional-dependencies]
+pytorch = ["torch>=1.9.0,<2.0.0"]
+tensorflow = ["tensorflow>=2.6.0,<3.0.0"]
+dev = [
+    "pytest>=6.0.0,<7.0.0",
+    "pytest-cov>=2.12.0,<3.0.0",
+    "black>=21.5b2,<23.0.0",
+    "flake8>=3.9.0,<5.0.0",
+    "mypy>=0.812,<1.0.0",
+    "isort>=5.9.0,<6.0.0",
+]
+docs = [
+    "sphinx>=4.0.0,<5.0.0",
+    "sphinx-rtd-theme>=0.5.2,<1.0.0",
+    "sphinx-autodoc-typehints>=1.12.0,<2.0.0",
+]
+all = [
+    "torch>=1.9.0,<2.0.0",
+    "tensorflow>=2.6.0,<3.0.0",
+    "pytest>=6.0.0,<7.0.0",
+    "pytest-cov>=2.12.0,<3.0.0",
+    "black>=21.5b2,<23.0.0",
+    "flake8>=3.9.0,<5.0.0",
+    "mypy>=0.812,<1.0.0",
+    "isort>=5.9.0,<6.0.0",
+    "sphinx>=4.0.0,<5.0.0",
+    "sphinx-rtd-theme>=0.5.2,<1.0.0",
+    "sphinx-autodoc-typehints>=1.12.0,<2.0.0",
+]
+
+[project.urls]
+Documentation = "https://memorial-tree.readthedocs.io"
+Source = "https://github.com/memorialtree/memorial-tree"
+"Bug Reports" = "https://github.com/memorialtree/memorial-tree/issues"
+
+[project.scripts]
+memorial-tree-visualize = "memorial_tree.cli:visualize_tree"
+
 [tool.black]
 line-length = 88
 target-version = ["py38"]
 include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
 
 [tool.isort]
 profile = "black"

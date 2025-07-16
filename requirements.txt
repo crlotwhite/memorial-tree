@@ -1,20 +1,27 @@
 # Core dependencies
-numpy>=1.20.0
-matplotlib>=3.4.0
-networkx>=2.6.0
+numpy>=1.20.0,<2.0.0
+matplotlib>=3.4.0,<4.0.0
+networkx>=2.6.0,<3.0.0
+typing-extensions>=4.0.0,<5.0.0
 
 # Optional backend dependencies
 # Uncomment as needed
-# torch>=1.9.0
-# tensorflow>=2.6.0
+# torch>=1.9.0,<2.0.0
+# tensorflow>=2.6.0,<3.0.0
 
 # Development dependencies
-pytest>=6.0.0
-pytest-cov>=2.12.0
-black>=21.5b2
-flake8>=3.9.0
-mypy>=0.812
+pytest>=6.0.0,<7.0.0
+pytest-cov>=2.12.0,<3.0.0
+black>=21.5b2,<23.0.0
+flake8>=3.9.0,<5.0.0
+mypy>=0.812,<1.0.0
+isort>=5.9.0,<6.0.0
 
 # Documentation
-sphinx>=4.0.0
-sphinx-rtd-theme>=0.5.2
+sphinx>=4.0.0,<5.0.0
+sphinx-rtd-theme>=0.5.2,<1.0.0
+sphinx-autodoc-typehints>=1.12.0,<2.0.0
+
+# Build tools
+build>=0.7.0,<1.0.0
+twine>=3.4.0,<4.0.0
