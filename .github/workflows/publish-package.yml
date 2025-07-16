@@ -1,0 +1,87 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (without v prefix)'
+        required: true
+        default: ''
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+        pip install -e ".[dev]"
+
+    - name: Set version from tag or input
+      id: set_version
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          # Extract version from tag (remove 'v' prefix)
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          # Use the version provided in workflow_dispatch input
+          VERSION=${{ github.event.inputs.version }}
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Build package
+      run: python -m build
+
+    - name: Configure GitHub Packages
+      run: |
+        cat > ~/.pypirc << EOF
+        [distutils]
+        index-servers =
+            github
+
+        [github]
+        repository = https://github.com/${{ github.repository }}/
+        username = ${{ github.actor }}
+        password = ${{ secrets.GITHUB_TOKEN }}
+        EOF
+
+    - name: Publish to GitHub Packages
+      run: |
+        python -m twine upload --repository github dist/*
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: dist/*
+        body: |
+          Memorial Tree v${{ steps.set_version.outputs.version }}
+
+          ### How to install
+          ```
+          pip install --index-url https://github.com/${{ github.repository_owner }}/memorial-tree/raw/main/dist/ memorial-tree==${{ steps.set_version.outputs.version }}
+          ```
+
+          Or add to your requirements.txt:
+          ```
+          memorial-tree @ https://github.com/${{ github.repository_owner }}/memorial-tree/releases/download/v${{ steps.set_version.outputs.version }}/memorial_tree-${{ steps.set_version.outputs.version }}-py3-none-any.whl
+          ```
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

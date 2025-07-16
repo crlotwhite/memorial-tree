@@ -1,10 +1,12 @@
 # Memorial Tree
 
 [![PyPI version](https://badge.fury.io/py/memorial-tree.svg)](https://badge.fury.io/py/memorial-tree)
-[![Tests](https://github.com/memorialtree/memorial-tree/actions/workflows/test.yml/badge.svg)](https://github.com/memorialtree/memorial-tree/actions/workflows/test.yml)
-[![Lint](https://github.com/memorialtree/memorial-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/memorialtree/memorial-tree/actions/workflows/lint.yml)
+[![Tests](https://github.com/crlotwhite/memorial-tree/actions/workflows/test.yml/badge.svg)](https://github.com/crlotwhite/memorial-tree/actions/workflows/test.yml)
+[![Lint](https://github.com/crlotwhite/memorial-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/crlotwhite/memorial-tree/actions/workflows/lint.yml)
 [![Documentation Status](https://readthedocs.io/en/latest/?badge=latest)](https://memorial-tree.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+*Read this in [한국어 (Korean)](README.ko.md)*
 
 Memorial Tree is a Python package for modeling human thought processes and decision-making using tree data structures. The package aims to provide tools for computational psychiatry research by representing both conscious choices and unconscious influences (ghost nodes) in human cognitive processes.
 
@@ -17,6 +19,8 @@ Memorial Tree is a Python package for modeling human thought processes and decis
 - Visualization tools for analyzing thought patterns and decision paths
 
 ## Installation
+
+### From PyPI (Coming Soon)
 
 ```bash
 # Basic installation
@@ -31,6 +35,24 @@ pip install memorial-tree[tensorflow]
 # For development
 pip install -e ".[dev,docs]"
 ```
+
+### From GitHub Packages
+
+You can install the package directly from GitHub Packages:
+
+```bash
+# Set up authentication (one-time setup)
+export GITHUB_USERNAME=your-github-username
+export GITHUB_TOKEN=your-personal-access-token
+
+# Install the latest version
+pip install --index-url https://github.com/crlotwhite/memorial-tree/raw/main/dist/ memorial-tree
+
+# Or specify a version
+pip install --index-url https://github.com/crlotwhite/memorial-tree/raw/main/dist/ memorial-tree==0.1.0
+```
+
+For more detailed instructions on using GitHub Packages, see [GitHub Packages Guide](docs/github_packages.md).
 
 ## Basic Usage
 
@@ -123,7 +145,7 @@ The documentation is automatically built and deployed to Read the Docs when chan
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details. If you have questions or suggestions, feel free to create an issue or contact me directly.
 
 ## Development
 
@@ -190,9 +212,10 @@ If you use Memorial Tree in your research, please cite:
 
 ```bibtex
 @software{memorial_tree,
-  author = {Memorial Tree Team},
+  author = {Noel Kim (crlotwhite)},
   title = {Memorial Tree: A Python Package for Modeling Human Thought Processes},
   year = {2025},
-  url = {https://github.com/yourusername/memorial-tree},
+  url = {https://github.com/crlotwhite/memorial-tree},
+  email = {crlotwhite@gmail.com}
 }
 ```
