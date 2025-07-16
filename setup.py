@@ -19,6 +19,7 @@ setup(
         "numpy>=1.20.0",
         "matplotlib>=3.4.0",
         "networkx>=2.6.0",
+        "pandas>=1.3.0",
     ],
     extras_require={
         "pytorch": ["torch>=1.9.0"],
@@ -30,6 +31,7 @@ setup(
             "flake8>=3.9.0",
             "mypy>=0.812",
             "isort>=5.9.0",
+            "memory_profiler>=0.60.0",
         ],
         "docs": [
             "sphinx>=4.0.0",
