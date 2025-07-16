@@ -110,10 +110,16 @@ For full documentation, visit [memorialtree.readthedocs.io](https://memorialtree
 To build the documentation locally:
 
 ```bash
+# Install documentation dependencies
+pip install -e ".[docs]"
+
+# Build the documentation
 cd docs
 make html
 # View docs in browser at docs/build/html/index.html
 ```
+
+The documentation is automatically built and deployed to Read the Docs when changes are pushed to the main branch or a new release is created.
 
 ## Contributing
 
@@ -128,6 +134,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 - **Tests**: Automatically runs tests on multiple Python versions for every push and pull request
 - **Linting**: Checks code quality using flake8, black, and mypy
 - **Publishing**: Automatically publishes new releases to PyPI when a new release is created
+- **Documentation**: Automatically builds and deploys documentation to Read the Docs
 
 To run the checks locally:
 
@@ -143,6 +150,34 @@ flake8 src tests examples
 
 # Run type checking
 mypy src tests examples
+```
+
+### Package Deployment
+
+The package is automatically deployed to PyPI when a new release is created on GitHub. The deployment process includes:
+
+1. Building the package
+2. Testing the package on TestPyPI
+3. Deploying to the official PyPI
+
+You can also manually deploy the package using the provided script:
+
+```bash
+# Deploy to TestPyPI only
+python scripts/deploy_to_pypi.py --test-only
+
+# Deploy to TestPyPI and then to PyPI (after confirmation)
+python scripts/deploy_to_pypi.py
+```
+
+To test the installation from PyPI or TestPyPI:
+
+```bash
+# Test installation from PyPI
+python scripts/test_installation.py
+
+# Test installation from TestPyPI
+python scripts/test_installation.py --test-pypi
 ```
 
 ## License
