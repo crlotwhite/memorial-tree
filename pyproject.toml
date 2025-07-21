@@ -64,7 +64,7 @@ dev = [
 docs = [
     "sphinx>=4.0.0,<5.0.0",
     "sphinx-rtd-theme>=0.5.2,<1.0.0",
-    "sphinx-autodoc-typehints>=1.12.0,<2.0.0",
+    "sphinx-autodoc-typehints>=1.12.0,<3.0.0",
 ]
 all = [
     "torch>=1.9.0,<2.0.0",
@@ -77,7 +77,7 @@ all = [
     "isort>=5.9.0,<6.0.0",
     "sphinx>=4.0.0,<5.0.0",
     "sphinx-rtd-theme>=0.5.2,<1.0.0",
-    "sphinx-autodoc-typehints>=1.12.0,<2.0.0",
+    "sphinx-autodoc-typehints>=1.12.0,<3.0.0",
 ]
 
 [project.urls]
