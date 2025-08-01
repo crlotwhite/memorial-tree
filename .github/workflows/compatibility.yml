@@ -18,7 +18,7 @@ jobs:
         networkx-version: ['2.6.0', '2.7.0', '2.8.0']
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
